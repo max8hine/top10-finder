@@ -1,0 +1,7 @@
+{
+  "adults": 2,
+  "nights": [3],
+  "horizonDays": 21,
+  "minDropPct": 1,
+  "requestsPerSecond": 3
+}

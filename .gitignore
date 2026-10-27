@@ -1,0 +1,5 @@
+.env
+captures/
+*.har
+node_modules/
+data/prices.db*
