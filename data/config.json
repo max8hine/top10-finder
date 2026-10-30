@@ -1,6 +1,6 @@
 {
   "adults": 2,
-  "nights": [3],
+  "nights": [3, 2, 1],
   "horizonDays": 14,
   "minDropPct": 1,
   "requestsPerSecond": 3,
@@ -8,6 +8,36 @@
     { "hotelId": 3008, "roomId": 476, "park": "Akaroa", "name": "Self Contained Studio Units" },
     { "hotelId": 3008, "roomId": 477, "park": "Akaroa", "name": "Self Contained Family Units" },
     { "hotelId": 3008, "roomId": 478, "park": "Akaroa", "name": "Standard Cabin" },
-    { "hotelId": 3008, "roomId": 539, "park": "Akaroa", "name": "Deluxe Cabin" }
+    { "hotelId": 3008, "roomId": 539, "park": "Akaroa", "name": "Deluxe Cabin" },
+
+    { "hotelId": 3071, "roomId": 945, "park": "Ross Beach", "name": "Sunset Studio Pod" },
+    { "hotelId": 3071, "roomId": 946, "park": "Ross Beach", "name": "Tui Studio Pod" },
+    { "hotelId": 3071, "roomId": 948, "park": "Ross Beach", "name": "Twin Tui Studio Pod" },
+    { "hotelId": 3071, "roomId": 950, "park": "Ross Beach", "name": "Pebble Tui Studio Pod" },
+    { "hotelId": 3071, "roomId": 953, "park": "Ross Beach", "name": "Geodesic Glamping Domes" },
+    { "hotelId": 3071, "roomId": 944, "park": "Ross Beach", "name": "Maxi Apartment Pod" },
+    { "hotelId": 3071, "roomId": 947, "park": "Ross Beach", "name": "Ensuite Pod" },
+    { "hotelId": 3071, "roomId": 951, "park": "Ross Beach", "name": "Standard Pod" },
+
+    { "hotelId": 3034, "roomId": 321, "park": "Pohara Beach", "name": "Beachfront Self-Contained Unit" },
+    { "hotelId": 3034, "roomId": 315, "park": "Pohara Beach", "name": "Beachfront Motel Unit" },
+    { "hotelId": 3034, "roomId": 307, "park": "Pohara Beach", "name": "2 Bedroom Motel" },
+
+    { "hotelId": 3024, "roomId": 75, "park": "Motueka", "name": "2 Bedroom Motel" },
+    { "hotelId": 3024, "roomId": 76, "park": "Motueka", "name": "One Bedroom Motel" },
+    { "hotelId": 3024, "roomId": 77, "park": "Motueka", "name": "1 Bed Studio Motel" },
+    { "hotelId": 3024, "roomId": 827, "park": "Motueka", "name": "2 Bed Studio Motel" },
+
+    { "hotelId": 3013, "roomId": 453, "park": "Greymouth Seaside", "name": "Studio Motel" },
+    { "hotelId": 3013, "roomId": 454, "park": "Greymouth Seaside", "name": "Self-Contained Double Studio Unit" },
+    { "hotelId": 3013, "roomId": 455, "park": "Greymouth Seaside", "name": "Self-Contained Twin Studio Unit" },
+
+    { "hotelId": 3014, "roomId": 1082, "park": "Hanmer Springs", "name": "Apartment 2 Bedroom - Sleeps 6" },
+    { "hotelId": 3014, "roomId": 212, "park": "Hanmer Springs", "name": "Motel 2 Bedroom - Sleeps 5" },
+    { "hotelId": 3014, "roomId": 218, "park": "Hanmer Springs", "name": "Motel Studio" },
+    { "hotelId": 3014, "roomId": 215, "park": "Hanmer Springs", "name": "Self Contained 2 Bedroom - Sleeps 6" },
+    { "hotelId": 3014, "roomId": 716, "park": "Hanmer Springs", "name": "Self Contained 2 Bedroom - Sleeps 4" },
+    { "hotelId": 3014, "roomId": 221, "park": "Hanmer Springs", "name": "Standard Unit Studio - Sleeps 6" },
+    { "hotelId": 3014, "roomId": 718, "park": "Hanmer Springs", "name": "Standard Unit Studio - Sleeps 4" }
   ]
 }

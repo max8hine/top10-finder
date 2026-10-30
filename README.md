@@ -38,6 +38,32 @@ TOP10_PASSWORD=...
 
 Requires Node 22+ (uses the built-in `node:sqlite`).
 
+## Start the interface on localhost
+
+The web app reads from the API, so both must be running. One command starts both (Ctrl-C stops both):
+
+```sh
+pnpm start      # API on :3000, web app on http://localhost:5173 (opens your browser)
+```
+
+Or run them separately in two terminals from the repo root:
+
+```sh
+# one-time, or after editing data/config.json
+pnpm run cli -- sync
+pnpm run cli -- poll      # fills the price database; the page is empty without it
+
+# terminal 1: JSON API on http://127.0.0.1:3000
+pnpm run api
+
+# terminal 2: web app, then open http://localhost:5173
+pnpm run web
+```
+
+- The page fetches everything on load. After a new `poll`, refresh the browser.
+- If the page shows "Could not load data", the API isn't running or `sync` hasn't been run.
+- Port 3000 is taken? Start the API with `PORT=3001 pnpm run api`. The web app proxies to port 3000, so also change the target in `apps/web/vite.config.ts`.
+
 ## Running
 
 | Command | What it does |
@@ -58,7 +84,7 @@ The web app is a view only. Prices come from `poll`, so run that on a schedule.
 `data/config.json`:
 
 - `adults`: guests per quote (default 2)
-- `nights`: stay lengths to price, e.g. `[1, 2, 3]`
+- `nights`: stay lengths in order of preference. Default `[3, 2, 1]`: price 3 nights, fall back to 2, then 1, if the longer stay can't be booked. Only the first bookable length is shown for each check-in date.
 - `horizonDays`: how many days ahead of today to poll check-in dates
 - `minDropPct`: smallest drop reported by `poll`
 - `requestsPerSecond`: throttle for the site API

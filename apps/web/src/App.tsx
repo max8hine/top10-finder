@@ -123,7 +123,7 @@ function Dashboard({ data, hotelId, onPark, maxDays, onWindow }: DashboardProps)
               return (
                 <article key={room.roomId} className="room">
                   {room.image && <img src={room.image} alt={room.name} />}
-                  <h3>{room.name}</h3>
+                  <h3><a href={room.url} target="_blank" rel="noreferrer">{room.name} ↗</a></h3>
                   {cheapest ? (
                     <p className="cheapest">From <strong>{money(cheapest.price)}</strong> · {day(cheapest.stayDate)}, {cheapest.nights} nights</p>
                   ) : (

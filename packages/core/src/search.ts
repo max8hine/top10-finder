@@ -26,9 +26,21 @@ export function deals({ fromDay = 0, toDay = 7 } = {}): Deal[] {
   const to = addDays(start, toDay);
   const rooms = new Map(cfg.rooms.map((r) => [r.roomId, r]));
 
+  const groups = [...groupByStay(observationsSince(from)).values()];
+
+  // A poll stops at the first bookable length, so shorter lengths priced in older polls are stale.
+  // For each room and check-in date, only the groups seen in the newest poll count.
+  const dayKey = (o: Observation) => `${o.room_id}|${o.stay_date}|${o.adults}`;
+  const newest = new Map<string, string>();
+  for (const obs of groups) {
+    const last = obs[obs.length - 1];
+    if ((newest.get(dayKey(last)) ?? '') < last.fetched_at) newest.set(dayKey(last), last.fetched_at);
+  }
+
   const out: Deal[] = [];
-  for (const obs of groupByStay(observationsSince(from)).values()) {
+  for (const obs of groups) {
     const latest = obs[obs.length - 1];
+    if (latest.fetched_at < (newest.get(dayKey(latest)) ?? '')) continue;
     if (!latest.available || latest.price === null) continue;
     if (latest.stay_date < from || latest.stay_date > to) continue;
 

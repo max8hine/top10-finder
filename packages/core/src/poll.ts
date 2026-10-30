@@ -36,8 +36,9 @@ export async function poll(cfg: Config = loadConfig()): Promise<PollResult> {
     const days = await client.arrivalDays(room.hotelId, room.roomId, start, end);
     result.requests++;
 
-    for (const nights of cfg.nights) {
-      for (const day of days) {
+    for (const day of days) {
+      // cfg.nights is in order of preference (e.g. [3, 2, 1]); stop at the first length that can be booked.
+      for (const nights of cfg.nights) {
         const prev = latestObservation.get(room.roomId, day.date, nights, cfg.adults) as
           | { available: number; price: number | null }
           | undefined;
@@ -58,6 +59,7 @@ export async function poll(cfg: Config = loadConfig()): Promise<PollResult> {
           ((quote.price - prev.price) / prev.price) * 100 <= -cfg.minDropPct) {
           result.changes.push({ kind: 'drop', label, stayDate: day.date, nights, from: prev.price, to: quote.price });
         }
+        if (quote.available) break;
       }
     }
   }

@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-10-30T21:50:14.567Z",
+  "syncedAt": "2026-10-30T22:43:34.506Z",
   "parks": [
     {
       "hotelId": 3008,
@@ -11,22 +11,221 @@
         {
           "roomId": 476,
           "name": "Self Contained Studio Units",
+          "url": "https://top10.co.nz/park/canterbury/akaroa-top-10-holiday-park/studio-unit/",
           "image": "https://top10.co.nz/media/vcwkvurx/akaroa-top-10-31.jpg?width=400&height=300&v=1da1dbd57d2ace0"
         },
         {
           "roomId": 477,
           "name": "Self Contained Family Units",
+          "url": "https://top10.co.nz/park/canterbury/akaroa-top-10-holiday-park/self-contained-unit/",
           "image": "https://top10.co.nz/media/2jxpa4j2/akaroa-top-10-24.jpg?width=400&height=300&v=1da1dbd9898dbf0"
         },
         {
           "roomId": 478,
           "name": "Standard Cabin",
+          "url": "https://top10.co.nz/park/canterbury/akaroa-top-10-holiday-park/standard-cabin/",
           "image": "https://top10.co.nz/media/u2omgtlw/akaroa-top-10-23.jpg?width=400&height=300&v=1da1dc02fc95160"
         },
         {
           "roomId": 539,
           "name": "Deluxe Cabin",
+          "url": "https://top10.co.nz/park/canterbury/akaroa-top-10-holiday-park/deluxe-standard-cabin/",
           "image": "https://top10.co.nz/media/ejxfwf03/akaroa-top-ten-spring-23.jpeg?width=400&height=300&v=1da2406c6ff3a30"
+        }
+      ]
+    },
+    {
+      "hotelId": 3071,
+      "name": "Ross Beach",
+      "town": "Ross",
+      "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/",
+      "image": "https://top10.co.nz/media/fm0oxzzn/evening-sunset.jpg?width=400&height=300&v=1dd56e27489d2d0",
+      "rooms": [
+        {
+          "roomId": 945,
+          "name": "Sunset Studio Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/sunset-studio-apartment-pod/",
+          "image": "https://top10.co.nz/media/qkmjn4b1/img_5205.jpg?width=400&height=300&v=1da27d672b57470"
+        },
+        {
+          "roomId": 946,
+          "name": "Tui Studio Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/studio-apartment-pod/",
+          "image": "https://top10.co.nz/media/qyubp0l3/img_2606.jpg?width=400&height=300&v=1d9ff0deea29370"
+        },
+        {
+          "roomId": 948,
+          "name": "Twin Tui Studio Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/twin-tui-studio-pod/",
+          "image": "https://top10.co.nz/media/gk1ipzwy/twin.jpg?width=400&height=300&v=1d9ff0d17268b40"
+        },
+        {
+          "roomId": 950,
+          "name": "Pebble Tui Studio Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/pebble-tui-studio-pod/",
+          "image": "https://top10.co.nz/media/ekoa5ljo/accom-web-image.jpg?width=400&height=300&v=1dca2a3a7deaeb0"
+        },
+        {
+          "roomId": 953,
+          "name": "Geodesic Glamping Domes",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/geo-domes/",
+          "image": "https://top10.co.nz/media/z5pjekup/img_8062.jpg?width=400&height=300&v=1da53f714403270"
+        },
+        {
+          "roomId": 944,
+          "name": "Maxi Apartment Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/maxi-studio-apartment-pod/",
+          "image": "https://top10.co.nz/media/3min1sre/63.jpg?rxy=0.5446505685778297,0.6265676166095986&width=400&height=300&v=1d9ff0182931df0"
+        },
+        {
+          "roomId": 947,
+          "name": "Ensuite Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/ensuite-pod/",
+          "image": "https://top10.co.nz/media/ebmj54tx/img_1999-1.jpg?width=400&height=300&v=1dc488a3be6a410"
+        },
+        {
+          "roomId": 951,
+          "name": "Standard Pod",
+          "url": "https://top10.co.nz/park/west-coast/ross-beach-top-10-holiday-park/standard-pod/",
+          "image": "https://top10.co.nz/media/1r0dkabg/img_3592.jpg?width=400&height=300&v=1dc4a0f07af5c10"
+        }
+      ]
+    },
+    {
+      "hotelId": 3034,
+      "name": "Pohara Beach",
+      "town": "Takaka",
+      "url": "https://top10.co.nz/park/nelson-tasman/pohara-beach-top-10-holiday-park/",
+      "image": "https://top10.co.nz/media/0f2jogzh/poharabeach.jpg?width=400&height=300&v=1da2313d2de8480",
+      "rooms": [
+        {
+          "roomId": 321,
+          "name": "Beachfront Self-Contained Unit",
+          "url": "https://top10.co.nz/park/nelson-tasman/pohara-beach-top-10-holiday-park/self-contained-unit-beachfront-sleeps-2/",
+          "image": "https://top10.co.nz/media/h1injmw5/wge071cr.jpeg?width=400&height=300&v=1da23192de52f00"
+        },
+        {
+          "roomId": 315,
+          "name": "Beachfront Motel Unit",
+          "url": "https://top10.co.nz/park/nelson-tasman/pohara-beach-top-10-holiday-park/hailes-self-contained-beachfront/",
+          "image": "https://top10.co.nz/media/wbdhn43a/ohhdzj-3.jpeg?width=400&height=300&v=1da2318fb4c7490"
+        },
+        {
+          "roomId": 307,
+          "name": "2 Bedroom Motel",
+          "url": "https://top10.co.nz/park/nelson-tasman/pohara-beach-top-10-holiday-park/motel-2-bedroom/",
+          "image": "https://top10.co.nz/media/kv0bkz0u/d3s2bcsu.jpeg?width=400&height=300&v=1da2314736d1e20"
+        }
+      ]
+    },
+    {
+      "hotelId": 3024,
+      "name": "Motueka",
+      "town": "Motueka",
+      "url": "https://top10.co.nz/park/nelson-tasman/motueka-top-10-holiday-park/",
+      "image": "https://top10.co.nz/media/vlsjbxi0/motueka.jpg?width=400&height=300&v=1da224d7b74cf90",
+      "rooms": [
+        {
+          "roomId": 75,
+          "name": "2 Bedroom Motel",
+          "url": "https://top10.co.nz/park/nelson-tasman/motueka-top-10-holiday-park/motel-2-bedroom/",
+          "image": "https://top10.co.nz/media/j3ophrcf/mot19-1909.jpg?width=400&height=300&v=1da22510d9b5530"
+        },
+        {
+          "roomId": 76,
+          "name": "One Bedroom Motel",
+          "url": "https://top10.co.nz/park/nelson-tasman/motueka-top-10-holiday-park/motel-1-bedroom/",
+          "image": "https://top10.co.nz/media/inhphgvs/1-bedroom-outside.jpg?width=400&height=300&v=1da225121e98b60"
+        },
+        {
+          "roomId": 77,
+          "name": "1 Bed Studio Motel",
+          "url": "https://top10.co.nz/park/nelson-tasman/motueka-top-10-holiday-park/1-bed-studio-motel/",
+          "image": "https://top10.co.nz/media/rb2fwfy3/studio-1-bed-outside.jpg?width=400&height=300&v=1da22517bb36260"
+        },
+        {
+          "roomId": 827,
+          "name": "2 Bed Studio Motel",
+          "url": "https://top10.co.nz/park/nelson-tasman/motueka-top-10-holiday-park/motel-studio/",
+          "image": "https://top10.co.nz/media/xywc2zmj/studio-2-beds.jpg?width=400&height=300&v=1da2251578af1f0"
+        }
+      ]
+    },
+    {
+      "hotelId": 3013,
+      "name": "Greymouth Seaside",
+      "town": "Greymouth",
+      "url": "https://top10.co.nz/park/west-coast/greymouth-seaside-top-10-holiday-park/",
+      "image": "https://top10.co.nz/media/besjeb0t/greymouth-hero.jpg?rxy=0.6785448505714398,0.6507981812097711&width=400&height=300&v=1da20d7ec61a290",
+      "rooms": [
+        {
+          "roomId": 453,
+          "name": "Studio Motel",
+          "url": "https://top10.co.nz/park/west-coast/greymouth-seaside-top-10-holiday-park/motel-studio/",
+          "image": "https://top10.co.nz/media/xkgldhja/greymouth-top-10-holiday-park-studio-motel.jpg?width=400&height=300&v=1da20cec5b5d1b0"
+        },
+        {
+          "roomId": 454,
+          "name": "Self-Contained Double Studio Unit",
+          "url": "https://top10.co.nz/park/west-coast/greymouth-seaside-top-10-holiday-park/self-contained-unit-double-studio/",
+          "image": "https://top10.co.nz/media/vuffkhfu/greymouth-top-10-holiday-park-double-studio-units-4.jpg?width=400&height=300&v=1da20cff23f3a40"
+        },
+        {
+          "roomId": 455,
+          "name": "Self-Contained Twin Studio Unit",
+          "url": "https://top10.co.nz/park/west-coast/greymouth-seaside-top-10-holiday-park/self-contained-unit/",
+          "image": "https://top10.co.nz/media/5aqlyet0/greymouth-top-10-holiday-park-twin-studio-units-2.jpg?width=400&height=300&v=1da20d01455baa0"
+        }
+      ]
+    },
+    {
+      "hotelId": 3014,
+      "name": "Hanmer Springs",
+      "town": "Hanmer Springs",
+      "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/",
+      "image": "https://top10.co.nz/media/3onh3yhd/cabin-appart-701.jpg?width=400&height=300&v=1da20d8f1023750",
+      "rooms": [
+        {
+          "roomId": 1082,
+          "name": "Apartment 2 Bedroom - Sleeps 6",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/apartment-2-bedroom-sleeps-6/",
+          "image": "https://top10.co.nz/media/53bjfbwy/210420_topten_tvc_024.jpg?width=400&height=300&v=1da20e209eff730"
+        },
+        {
+          "roomId": 212,
+          "name": "Motel 2 Bedroom - Sleeps 5",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/motel-2-bedroom/",
+          "image": "https://top10.co.nz/media/tenh25er/cabin-201-321.jpg?width=400&height=300&v=1da20e277fcb9c0"
+        },
+        {
+          "roomId": 218,
+          "name": "Motel Studio",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/motel-studio/",
+          "image": "https://top10.co.nz/media/n0gnd0li/cabin-104-277.jpg?width=400&height=300&v=1da20e3897a2740"
+        },
+        {
+          "roomId": 215,
+          "name": "Self Contained 2 Bedroom - Sleeps 6",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/self-contained-unit-2-bedroom/",
+          "image": "https://top10.co.nz/media/ylslupm0/cabin-1-127.jpg?width=400&height=300&v=1da20e40ed6a030"
+        },
+        {
+          "roomId": 716,
+          "name": "Self Contained 2 Bedroom - Sleeps 4",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/self-contained-unit-2-bedroom-sleeps-4/",
+          "image": "https://top10.co.nz/media/elujplaa/hanmer-top-10-selections-38-of-137.jpg?width=400&height=300&v=1da20e518c9d110"
+        },
+        {
+          "roomId": 221,
+          "name": "Standard Unit Studio - Sleeps 6",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/standard-unit-studio-sleeps-6/",
+          "image": "https://top10.co.nz/media/ejqhcs2w/cabin-33-376.jpg?width=400&height=300&v=1da20e5b9d514c0"
+        },
+        {
+          "roomId": 718,
+          "name": "Standard Unit Studio - Sleeps 4",
+          "url": "https://top10.co.nz/park/canterbury/hanmer-springs-top-10-holiday-park/standard-unit/",
+          "image": "https://top10.co.nz/media/bcqlfu2e/cabin-34-406.jpg?width=400&height=300&v=1da20e61442a5d0"
         }
       ]
     }

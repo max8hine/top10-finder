@@ -9,7 +9,7 @@ export interface Room {
 
 export interface Config {
   adults: number;
-  /** Stay lengths to price, e.g. [1, 2, 3]. */
+  /** Stay lengths in order of preference, e.g. [3, 2, 1]. The first one that can be booked is priced. */
   nights: number[];
   /** How many days of check-in dates to poll, counted from today. */
   horizonDays: number;
@@ -44,6 +44,8 @@ export interface LeadPoint {
 export interface CatalogRoom {
   roomId: number;
   name: string;
+  /** Absolute page URL on the TOP 10 site. */
+  url: string;
   /** Absolute image URL on the TOP 10 site, or null. */
   image: string | null;
 }
