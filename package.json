@@ -3,18 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "capture": "tsx scripts/capture.ts",
-    "probe": "tsx scripts/probe.ts",
-    "cli": "tsx --disable-warning=ExperimentalWarning src/cli.ts",
-    "sync-parks": "tsx scripts/sync-parks.ts"
+    "cli": "tsx --disable-warning=ExperimentalWarning apps/cli/src/cli.ts",
+    "api": "tsx --disable-warning=ExperimentalWarning apps/api/src/server.ts",
+    "web": "pnpm --filter @top10/web dev",
+    "typecheck": "pnpm -r run typecheck"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
-  },
-  "dependencies": {
-    "dotenv": "^18.0.8",
-    "playwright": "^1.64.1"
   }
 }

@@ -1,0 +1,34 @@
+{
+  "syncedAt": "2026-10-30T21:50:14.567Z",
+  "parks": [
+    {
+      "hotelId": 3008,
+      "name": "Akaroa",
+      "town": "Akaroa",
+      "url": "https://top10.co.nz/park/canterbury/akaroa-top-10-holiday-park/",
+      "image": "https://top10.co.nz/media/zoypadw3/akaroa-top-10-30.jpg?width=400&height=300&v=1da1d9e55110cf0",
+      "rooms": [
+        {
+          "roomId": 476,
+          "name": "Self Contained Studio Units",
+          "image": "https://top10.co.nz/media/vcwkvurx/akaroa-top-10-31.jpg?width=400&height=300&v=1da1dbd57d2ace0"
+        },
+        {
+          "roomId": 477,
+          "name": "Self Contained Family Units",
+          "image": "https://top10.co.nz/media/2jxpa4j2/akaroa-top-10-24.jpg?width=400&height=300&v=1da1dbd9898dbf0"
+        },
+        {
+          "roomId": 478,
+          "name": "Standard Cabin",
+          "image": "https://top10.co.nz/media/u2omgtlw/akaroa-top-10-23.jpg?width=400&height=300&v=1da1dc02fc95160"
+        },
+        {
+          "roomId": 539,
+          "name": "Deluxe Cabin",
+          "image": "https://top10.co.nz/media/ejxfwf03/akaroa-top-ten-spring-23.jpeg?width=400&height=300&v=1da2406c6ff3a30"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "adults": 2,
+  "nights": [3],
+  "horizonDays": 14,
+  "minDropPct": 1,
+  "requestsPerSecond": 3,
+  "rooms": [
+    { "hotelId": 3008, "roomId": 476, "park": "Akaroa", "name": "Self Contained Studio Units" },
+    { "hotelId": 3008, "roomId": 477, "park": "Akaroa", "name": "Self Contained Family Units" },
+    { "hotelId": 3008, "roomId": 478, "park": "Akaroa", "name": "Standard Cabin" },
+    { "hotelId": 3008, "roomId": 539, "park": "Akaroa", "name": "Deluxe Cabin" }
+  ]
+}

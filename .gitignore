@@ -1,5 +1,4 @@
 .env
-captures/
-*.har
 node_modules/
+dist/
 data/prices.db*
