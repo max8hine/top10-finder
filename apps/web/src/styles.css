@@ -50,12 +50,5 @@ select { padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; b
 .room ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .room li { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 4px 0; font-size: 0.92rem; }
 .cheapest strong { color: var(--accent); }
-.tag { margin-left: 8px; font-style: normal; font-size: 0.75rem; background: #dcf2e9; color: var(--accent); padding: 1px 6px; border-radius: 999px; }
-
-.lead { background: var(--card); border-radius: 12px; padding: 16px; }
-.lead h2 { margin-top: 0; font-size: 1.2rem; }
-.bars { display: grid; gap: 4px; }
-.bar-row { display: grid; grid-template-columns: 40px 1fr 70px; gap: 8px; align-items: center; font-size: 0.9rem; }
-.bar { height: 12px; background: var(--accent); border-radius: 4px; min-width: 2px; }
 
 footer { font-size: 0.85rem; }

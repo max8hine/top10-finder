@@ -13,8 +13,6 @@ export interface Config {
   nights: number[];
   /** How many days of check-in dates to poll, counted from today. */
   horizonDays: number;
-  /** Smallest drop (%) that poll() reports as a change. */
-  minDropPct: number;
   requestsPerSecond: number;
   rooms: Room[];
 }
@@ -25,20 +23,16 @@ export interface Deal {
   label: string;
   stayDate: string;
   nights: number;
+  /** Member price per night: the whole-stay total divided by nights. */
   price: number;
-  /** Price at the previous poll, or null if this is the first sighting. */
-  previousPrice: number | null;
-  lowestPrice: number;
-  /** True when the current price is the lowest ever recorded for this stay. */
-  isLowest: boolean;
+  /** Member price for the whole stay. */
+  total: number;
 }
 
-export interface LeadPoint {
-  /** Days between the poll and check-in. 0 = same day. */
-  daysBefore: number;
-  samples: number;
-  /** Average of price / cheapest price seen for the same stay. 1.0 = as cheap as it gets. */
-  avgRatio: number;
+export interface DealsResult {
+  /** ISO time of the poll these prices come from. */
+  fetchedAt: string;
+  deals: Deal[];
 }
 
 export interface CatalogRoom {

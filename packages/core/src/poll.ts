@@ -1,27 +1,19 @@
-import { Top10Client, type Quote } from './client.js';
+import { Top10Client } from './client.js';
 import { loadConfig } from './config.js';
 import { addDays, today } from './date.js';
-import { insertObservation, latestObservation } from './store.js';
+import { saveSnapshot, type Stay } from './snapshot.js';
 import type { Config } from './types.js';
 
-export interface Change {
-  kind: 'drop' | 'available';
-  label: string;
-  stayDate: string;
-  nights: number;
-  from: number | null;
-  to: number;
-}
-
 export interface PollResult {
+  /** Bookable stays found. */
   stays: number;
   requests: number;
-  changes: Change[];
 }
 
 /**
- * Price every bookable stay in the horizon for each configured room and record it.
- * Reports price drops and stays that became bookable since the previous poll.
+ * Price every bookable check-in date in the horizon for each configured room and save the
+ * result as the new snapshot. For each date, config.nights is tried in order of preference
+ * (e.g. [3, 2, 1]) and the first length that can be booked is kept.
  */
 export async function poll(cfg: Config = loadConfig()): Promise<PollResult> {
   const client = new Top10Client(1000 / cfg.requestsPerSecond);
@@ -29,39 +21,26 @@ export async function poll(cfg: Config = loadConfig()): Promise<PollResult> {
 
   const start = today();
   const end = addDays(start, cfg.horizonDays);
-  const fetchedAt = new Date().toISOString();
-  const result: PollResult = { stays: 0, requests: 0, changes: [] };
+  const stays: Stay[] = [];
+  let requests = 0;
 
   for (const room of cfg.rooms) {
     const days = await client.arrivalDays(room.hotelId, room.roomId, start, end);
-    result.requests++;
+    requests++;
 
     for (const day of days) {
-      // cfg.nights is in order of preference (e.g. [3, 2, 1]); stop at the first length that can be booked.
+      if (!day.available) continue;
       for (const nights of cfg.nights) {
-        const prev = latestObservation.get(room.roomId, day.date, nights, cfg.adults) as
-          | { available: number; price: number | null }
-          | undefined;
-
-        let quote: Quote = { available: false, price: null, note: 'unavailable' };
-        if (day.available) {
-          quote = await client.quote(room.hotelId, room.roomId, day.date, addDays(day.date, nights), cfg.adults);
-          result.requests++;
+        const total = await client.quote(room.hotelId, room.roomId, day.date, addDays(day.date, nights), cfg.adults);
+        requests++;
+        if (total !== null) {
+          stays.push({ hotelId: room.hotelId, roomId: room.roomId, stayDate: day.date, nights, total });
+          break;
         }
-        insertObservation.run(fetchedAt, room.roomId, day.date, nights, cfg.adults,
-          quote.available ? 1 : 0, quote.price, quote.note);
-        result.stays++;
-
-        const label = `${room.park} / ${room.name}`;
-        if (quote.price !== null && prev && !prev.available) {
-          result.changes.push({ kind: 'available', label, stayDate: day.date, nights, from: null, to: quote.price });
-        } else if (quote.price !== null && prev?.price != null &&
-          ((quote.price - prev.price) / prev.price) * 100 <= -cfg.minDropPct) {
-          result.changes.push({ kind: 'drop', label, stayDate: day.date, nights, from: prev.price, to: quote.price });
-        }
-        if (quote.available) break;
       }
     }
   }
-  return result;
+
+  saveSnapshot({ fetchedAt: new Date().toISOString(), stays });
+  return { stays: stays.length, requests };
 }

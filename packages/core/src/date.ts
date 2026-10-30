@@ -10,10 +10,3 @@ export const addDays = (day: string, n: number) => {
   d.setDate(d.getDate() + n);
   return ymd(d);
 };
-
-/** Whole days from `a` to `b` (both YYYY-MM-DD). */
-export const daysBetween = (a: string, b: string) =>
-  Math.round((Date.parse(b + 'T00:00:00') - Date.parse(a + 'T00:00:00')) / 86_400_000);
-
-/** Local calendar date of an ISO timestamp. */
-export const localDate = (iso: string) => ymd(new Date(iso));

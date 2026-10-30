@@ -2,7 +2,6 @@
   "adults": 2,
   "nights": [3, 2, 1],
   "horizonDays": 14,
-  "minDropPct": 1,
   "requestsPerSecond": 3,
   "rooms": [
     { "hotelId": 3008, "roomId": 476, "park": "Akaroa", "name": "Self Contained Studio Units" },

@@ -4,13 +4,6 @@ import { ymd } from './date.js';
 const BASE = 'https://top10.co.nz';
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36';
 
-/** Price for the logged-in member. `price` is null when the stay can't be booked. */
-export interface Quote {
-  available: boolean;
-  price: number | null;
-  note: string | null;
-}
-
 const cookieHeader = (jar: Record<string, string>) =>
   Object.entries(jar).map(([k, v]) => `${k}=${v}`).join('; ');
 
@@ -69,14 +62,12 @@ export class Top10Client {
       .filter((d) => d.date >= fromDate && d.date <= toDate);
   }
 
-  /** Member price for a stay. */
-  async quote(hotelId: number, roomId: number, checkIn: string, checkOut: string, adults: number): Promise<Quote> {
+  /** Member price for the whole stay, or null if it can't be booked. */
+  async quote(hotelId: number, roomId: number, checkIn: string, checkOut: string, adults: number): Promise<number | null> {
     const url = `${BASE}/api/hotels/${hotelId}/rooms/${roomId}/pricing/${checkIn}/${checkOut}?adults=${adults}&children=0&infants=0&promoCode=&explain=true`;
     const res = await this.send(url);
     if (!res.ok) throw new Error(`pricing ${res.status}`);
-    const j = (await res.json()) as { offers?: { totalAmount: number }[]; messages?: string[] };
-    const offer = j.offers?.[0];
-    if (!offer) return { available: false, price: null, note: j.messages?.[0] ?? 'no offer' };
-    return { available: true, price: offer.totalAmount, note: null };
+    const j = (await res.json()) as { offers?: { totalAmount: number }[] };
+    return j.offers?.[0]?.totalAmount ?? null;
   }
 }
