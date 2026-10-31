@@ -2,6 +2,7 @@
 export { poll, type PollResult } from './poll.js';
 export { refresh, refreshStatus } from './refresh.js';
 export { deals } from './search.js';
+export { removeRoom } from './rooms.js';
 export { loadConfig } from './config.js';
 export { loadCatalog, syncCatalog } from './catalog.js';
 export { Top10Client } from './client.js';

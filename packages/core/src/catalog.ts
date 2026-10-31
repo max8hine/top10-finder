@@ -49,9 +49,11 @@ export async function syncCatalog(): Promise<Catalog> {
   });
 
   const catalog: Catalog = { syncedAt: new Date().toISOString(), parks };
-  writeFileSync(FILE, JSON.stringify(catalog, null, 2) + '\n');
+  saveCatalog(catalog);
   return catalog;
 }
+
+export const saveCatalog = (catalog: Catalog) => writeFileSync(FILE, JSON.stringify(catalog, null, 2) + '\n');
 
 export function loadCatalog(): Catalog {
   try {

@@ -1,5 +1,5 @@
 import { createServer, type ServerResponse } from 'node:http';
-import { deals, loadCatalog, loadConfig, refresh, refreshStatus } from '@top10/core';
+import { deals, loadCatalog, loadConfig, refresh, refreshStatus, removeRoom } from '@top10/core';
 
 // JSON API over the core library. The web app and any other client read from here.
 // Prices come from the latest poll. POST /api/refresh starts one in the background when the last is stale.
@@ -14,6 +14,11 @@ const send = (res: ServerResponse, status: number, body: unknown) =>
 createServer((req, res) => {
   const url = new URL(req.url ?? '/', 'http://localhost');
   try {
+    const room = url.pathname.match(/^\/api\/rooms\/(\d+)$/);
+    if (room) {
+      if (req.method !== 'DELETE') return send(res, 405, { error: 'use DELETE' });
+      return send(res, 200, { horizonDays: loadConfig().horizonDays, ...removeRoom(Number(room[1])) });
+    }
     switch (url.pathname) {
       case '/api/catalog':
         return send(res, 200, { horizonDays: loadConfig().horizonDays, ...loadCatalog() });

@@ -45,7 +45,13 @@ select { padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; b
 }
 .hero h2 { margin: 0; }
 .rooms { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-.room { background: var(--card); border-radius: 12px; padding: 12px; display: grid; gap: 8px; align-content: start; }
+.room { position: relative; overflow: hidden; background: var(--card); border-radius: 12px; padding: 12px; display: grid; gap: 8px; align-content: start; }
+.remove {
+  position: absolute; top: 0; right: 0; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%;
+  display: grid; place-items: center; background: #fff; color: var(--ink); cursor: pointer;
+}
+.remove svg { width: 12px; height: 12px; }
+.remove:hover { color: #b3261e; }
 .room h3 { margin: 0; font-size: 1.05rem; }
 .room ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .room li { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 4px 0; font-size: 0.92rem; }

@@ -33,7 +33,6 @@
     { "hotelId": 3013, "roomId": 454, "park": "Greymouth Seaside", "name": "Self-Contained Double Studio Unit" },
     { "hotelId": 3013, "roomId": 455, "park": "Greymouth Seaside", "name": "Self-Contained Twin Studio Unit" },
 
-    { "hotelId": 3014, "roomId": 1082, "park": "Hanmer Springs", "name": "Apartment 2 Bedroom - Sleeps 6" },
     { "hotelId": 3014, "roomId": 212, "park": "Hanmer Springs", "name": "Motel 2 Bedroom - Sleeps 5" },
     { "hotelId": 3014, "roomId": 218, "park": "Hanmer Springs", "name": "Motel Studio" },
     { "hotelId": 3014, "roomId": 215, "park": "Hanmer Springs", "name": "Self Contained 2 Bedroom - Sleeps 6" },

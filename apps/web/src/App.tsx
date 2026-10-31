@@ -79,6 +79,19 @@ export function App() {
     return () => clearInterval(timer);
   }, [polling]);
 
+  // Stop tracking a room. The API updates config.json and returns the new catalog.
+  const removeRoom = async (roomId: number, name: string) => {
+    if (!window.confirm(`Stop tracking "${name}"? It is removed from config.json.`)) return;
+    try {
+      const catalog = await getJson<CatalogResponse>(`/api/rooms/${roomId}`, { method: 'DELETE' });
+      const prices = await getJson<DealsResult>('/api/deals');
+      setData({ catalog, prices });
+      setHotelId((id) => (catalog.parks.some((p) => p.hotelId === id) ? id : null));
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
   const refreshNow = () =>
     getJson<RefreshStatus>('/api/refresh?force=1', { method: 'POST' }).then(setStatus).catch((e: Error) => setError(e.message));
 
@@ -96,20 +109,21 @@ export function App() {
   }
   if (!data) return <main className="page"><p>Loading prices…</p></main>;
 
-  return <Dashboard data={data} status={status} onRefresh={refreshNow} hotelId={hotelId} onPark={setHotelId} maxDays={maxDays} onWindow={setMaxDays} />;
+  return <Dashboard data={data} status={status} onRefresh={refreshNow} onRemove={removeRoom} hotelId={hotelId} onPark={setHotelId} maxDays={maxDays} onWindow={setMaxDays} />;
 }
 
 interface DashboardProps {
   data: PageData;
   status: RefreshStatus | null;
   onRefresh: () => void;
+  onRemove: (roomId: number, name: string) => void;
   hotelId: number | null;
   onPark: (id: number | null) => void;
   maxDays: number;
   onWindow: (n: number) => void;
 }
 
-function Dashboard({ data, status, onRefresh, hotelId, onPark, maxDays, onWindow }: DashboardProps) {
+function Dashboard({ data, status, onRefresh, onRemove, hotelId, onPark, maxDays, onWindow }: DashboardProps) {
   const today = useMemo(todayKey, []);
   const { catalog, prices } = data;
 
@@ -154,6 +168,9 @@ function Dashboard({ data, status, onRefresh, hotelId, onPark, maxDays, onWindow
               const cheapest = cheapestOf(roomDeals);
               return (
                 <article key={room.roomId} className="room">
+                  <button className="remove" title="Stop tracking this room" aria-label={`Stop tracking ${room.name}`} onClick={() => onRemove(room.roomId, room.name)}>
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 2l8 8M10 2l-8 8" /></svg>
+                  </button>
                   {room.image && <img src={room.image} alt={room.name} />}
                   <h3><a href={room.url} target="_blank" rel="noreferrer">{room.name} ↗</a></h3>
                   {cheapest ? (

@@ -19,7 +19,7 @@ export function deals({ fromDay = 0, toDay }: { fromDay?: number; toDay?: number
   const rooms = new Map(cfg.rooms.map((r) => [r.roomId, r]));
 
   const list: Deal[] = snapshot.stays
-    .filter((s) => s.stayDate >= from && s.stayDate <= to)
+    .filter((s) => rooms.has(s.roomId) && s.stayDate >= from && s.stayDate <= to)
     .map((s) => {
       const room = rooms.get(s.roomId);
       const low = lows.get(stayKey(s.roomId, s.stayDate, s.nights));
