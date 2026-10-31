@@ -14,6 +14,10 @@ export interface Config {
   /** How many days of check-in dates to poll, counted from today. */
   horizonDays: number;
   requestsPerSecond: number;
+  /** A poll is started on page load when the last one is older than this. */
+  pollEveryHours: number;
+  /** Price history older than this many days is deleted. */
+  historyDays: number;
   rooms: Room[];
 }
 
@@ -27,12 +31,23 @@ export interface Deal {
   price: number;
   /** Member price for the whole stay. */
   total: number;
+  /** Lowest per-night price seen in history for this room, check-in date and length. Null until it has been seen twice. */
+  low: { price: number; seenAt: string } | null;
 }
 
 export interface DealsResult {
-  /** ISO time of the poll these prices come from. */
-  fetchedAt: string;
+  /** ISO time of the poll these prices come from, or null if no poll has run yet. */
+  fetchedAt: string | null;
   deals: Deal[];
+}
+
+export interface RefreshStatus {
+  /** ISO time of the latest finished poll, or null. */
+  fetchedAt: string | null;
+  /** A poll is running now. */
+  polling: boolean;
+  /** Error from the last background poll, if it failed. */
+  error: string | null;
 }
 
 export interface CatalogRoom {

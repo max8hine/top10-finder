@@ -1,8 +1,8 @@
 import { createServer, type ServerResponse } from 'node:http';
-import { deals, loadCatalog, loadConfig } from '@top10/core';
+import { deals, loadCatalog, loadConfig, refresh, refreshStatus } from '@top10/core';
 
 // JSON API over the core library. The web app and any other client read from here.
-// Prices come from the latest `pnpm run cli -- poll` (run it on a schedule); this server only reads.
+// Prices come from the latest poll. POST /api/refresh starts one in the background when the last is stale.
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -19,6 +19,11 @@ createServer((req, res) => {
         return send(res, 200, { horizonDays: loadConfig().horizonDays, ...loadCatalog() });
       case '/api/deals':
         return send(res, 200, deals({ fromDay: int(url.searchParams.get('from')), toDay: int(url.searchParams.get('to')) }));
+      case '/api/status':
+        return send(res, 200, refreshStatus());
+      case '/api/refresh':
+        if (req.method !== 'POST') return send(res, 405, { error: 'use POST' });
+        return send(res, 200, refresh({ force: url.searchParams.get('force') === '1' }));
       default:
         return send(res, 404, { error: 'not found' });
     }

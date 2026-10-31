@@ -2,3 +2,4 @@
 node_modules/
 dist/
 data/prices.json*
+data/history.db*

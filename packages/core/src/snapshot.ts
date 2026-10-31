@@ -28,10 +28,11 @@ export function saveSnapshot(snapshot: Snapshot) {
   renameSync(tmp, FILE);
 }
 
-export function loadSnapshot(): Snapshot {
+/** The latest snapshot, or null if no poll has run yet. */
+export function loadSnapshot(): Snapshot | null {
   try {
     return JSON.parse(readFileSync(FILE, 'utf8')) as Snapshot;
   } catch {
-    throw new Error('No prices yet. Run: pnpm run cli -- poll');
+    return null;
   }
 }

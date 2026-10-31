@@ -1,5 +1,6 @@
 import { loadConfig } from './config.js';
 import { addDays, today } from './date.js';
+import { lowestSeen, stayKey } from './history.js';
 import { loadSnapshot } from './snapshot.js';
 import type { Deal, DealsResult } from './types.js';
 
@@ -10,7 +11,9 @@ import type { Deal, DealsResult } from './types.js';
 export function deals({ fromDay = 0, toDay }: { fromDay?: number; toDay?: number } = {}): DealsResult {
   const cfg = loadConfig();
   const snapshot = loadSnapshot();
+  if (!snapshot) return { fetchedAt: null, deals: [] };
   const start = today();
+  const lows = lowestSeen(start);
   const from = addDays(start, fromDay);
   const to = addDays(start, toDay ?? cfg.horizonDays);
   const rooms = new Map(cfg.rooms.map((r) => [r.roomId, r]));
@@ -19,6 +22,7 @@ export function deals({ fromDay = 0, toDay }: { fromDay?: number; toDay?: number
     .filter((s) => s.stayDate >= from && s.stayDate <= to)
     .map((s) => {
       const room = rooms.get(s.roomId);
+      const low = lows.get(stayKey(s.roomId, s.stayDate, s.nights));
       return {
         hotelId: s.hotelId,
         roomId: s.roomId,
@@ -27,6 +31,7 @@ export function deals({ fromDay = 0, toDay }: { fromDay?: number; toDay?: number
         nights: s.nights,
         price: Math.round((s.total / s.nights) * 100) / 100,
         total: s.total,
+        low: low && low.polls > 1 ? { price: Math.round((low.total / s.nights) * 100) / 100, seenAt: low.seenAt } : null,
       };
     })
     .sort((a, b) => a.price - b.price || a.stayDate.localeCompare(b.stayDate));

@@ -1,7 +1,8 @@
 import { poll, deals, syncCatalog, type Deal } from '@top10/core';
 
 const fmtDeal = (d: Deal) =>
-  `${d.stayDate}  ${d.nights}n  $${d.price.toFixed(2)}/night  ($${d.total} total)  ${d.label}`;
+  `${d.stayDate}  ${d.nights}n  $${d.price.toFixed(2)}/night  ($${d.total} total)  ${d.label}` +
+  (d.low && d.low.price < d.price ? `  [low $${d.low.price.toFixed(2)} on ${d.low.seenAt.slice(0, 10)}]` : '');
 
 const USAGE = [
   'usage:',
@@ -27,6 +28,10 @@ switch (cmd) {
   case 'deals': {
     const [fromDay, toDay] = args.map(Number);
     const { fetchedAt, deals: list } = deals({ fromDay, toDay });
+    if (!fetchedAt) {
+      console.log('No prices yet. Run: pnpm run cli -- poll');
+      break;
+    }
     console.log(`prices from ${new Date(fetchedAt).toLocaleString()}`);
     console.log(list.length ? list.map(fmtDeal).join('\n') : 'nothing bookable in that window');
     break;

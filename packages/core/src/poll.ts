@@ -1,6 +1,7 @@
 import { Top10Client } from './client.js';
 import { loadConfig } from './config.js';
 import { addDays, today } from './date.js';
+import { recordPoll } from './history.js';
 import { saveSnapshot, type Stay } from './snapshot.js';
 import type { Config } from './types.js';
 
@@ -12,7 +13,7 @@ export interface PollResult {
 
 /**
  * Price every bookable check-in date in the horizon for each configured room and save the
- * result as the new snapshot. For each date, config.nights is tried in order of preference
+ * result as the new snapshot and in the price history. For each date, config.nights is tried in order of preference
  * (e.g. [3, 2, 1]) and the first length that can be booked is kept.
  */
 export async function poll(cfg: Config = loadConfig()): Promise<PollResult> {
@@ -41,6 +42,8 @@ export async function poll(cfg: Config = loadConfig()): Promise<PollResult> {
     }
   }
 
-  saveSnapshot({ fetchedAt: new Date().toISOString(), stays });
+  const snapshot = { fetchedAt: new Date().toISOString(), stays };
+  saveSnapshot(snapshot);
+  recordPoll(snapshot, cfg.historyDays);
   return { stays: stays.length, requests };
 }

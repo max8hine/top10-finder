@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import type { Catalog, CatalogPark, Deal, DealsResult } from '@top10/core/types';
+import type { Catalog, CatalogPark, Deal, DealsResult, RefreshStatus } from '@top10/core/types';
 
 // Data is fetched once on page load from the JSON API (apps/api), which wraps @top10/core.
 
@@ -33,8 +33,8 @@ const daysAway = (stayDate: string, today: string) =>
 const cheapestOf = (deals: Deal[]) =>
   deals.reduce<Deal | null>((best, d) => (!best || d.price < best.price ? d : best), null);
 
-async function getJson<T>(path: string): Promise<T> {
-  const res = await fetch(path);
+async function getJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(path, init);
   const body = await res.json();
   if (!res.ok) throw new Error(body.error ?? res.statusText);
   return body as T;
@@ -45,12 +45,42 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const [hotelId, setHotelId] = useState<number | null>(null);
   const [maxDays, setMaxDays] = useState(WINDOWS[2].maxDays);
+  const [status, setStatus] = useState<RefreshStatus | null>(null);
 
+  // On load: read what we have, and ask the API to poll if the last poll is stale.
   useEffect(() => {
-    Promise.all([getJson<CatalogResponse>('/api/catalog'), getJson<DealsResult>('/api/deals')])
-      .then(([catalog, prices]) => setData({ catalog, prices }))
+    Promise.all([
+      getJson<CatalogResponse>('/api/catalog'),
+      getJson<DealsResult>('/api/deals'),
+      getJson<RefreshStatus>('/api/refresh', { method: 'POST' }),
+    ])
+      .then(([catalog, prices, st]) => {
+        setData({ catalog, prices });
+        setStatus(st);
+      })
       .catch((e: Error) => setError(e.message));
   }, []);
+
+  // While a poll runs (a few minutes), check on it and reload the prices when it finishes.
+  const polling = status?.polling ?? false;
+  useEffect(() => {
+    if (!polling) return;
+    const timer = setInterval(async () => {
+      try {
+        const st = await getJson<RefreshStatus>('/api/status');
+        if (st.polling) return;
+        const prices = await getJson<DealsResult>('/api/deals');
+        setData((d) => d && { ...d, prices });
+        setStatus(st);
+      } catch (e) {
+        setError((e as Error).message);
+      }
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [polling]);
+
+  const refreshNow = () =>
+    getJson<RefreshStatus>('/api/refresh?force=1', { method: 'POST' }).then(setStatus).catch((e: Error) => setError(e.message));
 
   if (error) {
     return (
@@ -66,18 +96,20 @@ export function App() {
   }
   if (!data) return <main className="page"><p>Loading prices…</p></main>;
 
-  return <Dashboard data={data} hotelId={hotelId} onPark={setHotelId} maxDays={maxDays} onWindow={setMaxDays} />;
+  return <Dashboard data={data} status={status} onRefresh={refreshNow} hotelId={hotelId} onPark={setHotelId} maxDays={maxDays} onWindow={setMaxDays} />;
 }
 
 interface DashboardProps {
   data: PageData;
+  status: RefreshStatus | null;
+  onRefresh: () => void;
   hotelId: number | null;
   onPark: (id: number | null) => void;
   maxDays: number;
   onWindow: (n: number) => void;
 }
 
-function Dashboard({ data, hotelId, onPark, maxDays, onWindow }: DashboardProps) {
+function Dashboard({ data, status, onRefresh, hotelId, onPark, maxDays, onWindow }: DashboardProps) {
   const today = useMemo(todayKey, []);
   const { catalog, prices } = data;
 
@@ -133,7 +165,10 @@ function Dashboard({ data, hotelId, onPark, maxDays, onWindow }: DashboardProps)
                     {roomDeals.map((d) => (
                       <li key={d.stayDate + d.nights} title={`${money(d.total)} total for ${d.nights} nights`}>
                         <span>{day(d.stayDate)} · {d.nights}n</span>
-                        <span>{money(d.price)} / night</span>
+                        <span>
+                          {money(d.price)} / night
+                          {d.low && d.low.price < d.price && <span className="muted"> · low {money(d.low.price)}</span>}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -144,7 +179,11 @@ function Dashboard({ data, hotelId, onPark, maxDays, onWindow }: DashboardProps)
         </section>
       )}
 
-      <footer className="muted">Prices from {new Date(prices.fetchedAt).toLocaleString('en-NZ')} · horizon {catalog.horizonDays} days</footer>
+      <footer className="muted">
+        {prices.fetchedAt ? `Prices from ${new Date(prices.fetchedAt).toLocaleString('en-NZ')}` : 'No prices yet'} · horizon {catalog.horizonDays} days ·{' '}
+        {status?.polling ? 'Refreshing prices, this takes a few minutes…' : <button onClick={onRefresh}>Refresh prices</button>}
+        {status?.error && <span className="error"> Refresh failed: {status.error}</span>}
+      </footer>
     </main>
   );
 }

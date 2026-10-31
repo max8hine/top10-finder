@@ -3,6 +3,8 @@
   "nights": [3, 2, 1],
   "horizonDays": 14,
   "requestsPerSecond": 3,
+  "pollEveryHours": 72,
+  "historyDays": 365,
   "rooms": [
     { "hotelId": 3008, "roomId": 476, "park": "Akaroa", "name": "Self Contained Studio Units" },
     { "hotelId": 3008, "roomId": 477, "park": "Akaroa", "name": "Self Contained Family Units" },
