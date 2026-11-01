@@ -14,7 +14,7 @@ interface SitePark {
   townOrDistrict: string;
   url: string;
   image?: { url: string } | null;
-  rooms: { roomTypeId: number; name: string; image?: { url: string } | null }[];
+  rooms: { roomTypeId: number; name: string; url: string; image?: { url: string } | null }[];
 }
 
 const absolute = (path?: string | null) => (path ? BASE + path : null);
@@ -36,7 +36,7 @@ export async function syncCatalog(): Promise<Catalog> {
     const rooms = cfg.rooms.filter((r) => r.hotelId === hotelId).map((r) => {
       const room = site.rooms.find((x) => x.roomTypeId === r.roomId);
       if (!room) throw new Error(`room ${r.roomId} not found in hotel ${hotelId}`);
-      return { roomId: r.roomId, name: room.name, image: absolute(room.image?.url) };
+      return { roomId: r.roomId, name: room.name, url: room.url, image: absolute(room.image?.url) };
     });
     return {
       hotelId,
@@ -49,9 +49,11 @@ export async function syncCatalog(): Promise<Catalog> {
   });
 
   const catalog: Catalog = { syncedAt: new Date().toISOString(), parks };
-  writeFileSync(FILE, JSON.stringify(catalog, null, 2) + '\n');
+  saveCatalog(catalog);
   return catalog;
 }
+
+export const saveCatalog = (catalog: Catalog) => writeFileSync(FILE, JSON.stringify(catalog, null, 2) + '\n');
 
 export function loadCatalog(): Catalog {
   try {

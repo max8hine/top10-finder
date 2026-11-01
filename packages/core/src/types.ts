@@ -9,13 +9,17 @@ export interface Room {
 
 export interface Config {
   adults: number;
-  /** Stay lengths to price, e.g. [1, 2, 3]. */
+  /** Stay lengths in order of preference, e.g. [3, 2, 1]. The first one that can be booked is priced. */
   nights: number[];
   /** How many days of check-in dates to poll, counted from today. */
   horizonDays: number;
-  /** Smallest drop (%) that poll() reports as a change. */
-  minDropPct: number;
   requestsPerSecond: number;
+  /** A poll is started on page load when the last one is older than this. */
+  pollEveryHours: number;
+  /** Price history older than this many days is deleted. */
+  historyDays: number;
+  /** Weekend stays recorded beyond the horizon: `nights` from each Friday check-in (see weekends.ts). */
+  weekends: { nights: number; startWeeks: number; count: number };
   rooms: Room[];
 }
 
@@ -25,25 +29,34 @@ export interface Deal {
   label: string;
   stayDate: string;
   nights: number;
+  /** Member price per night: the whole-stay total divided by nights. */
   price: number;
-  /** Price at the previous poll, or null if this is the first sighting. */
-  previousPrice: number | null;
-  lowestPrice: number;
-  /** True when the current price is the lowest ever recorded for this stay. */
-  isLowest: boolean;
+  /** Member price for the whole stay. */
+  total: number;
+  /** Lowest per-night price seen in history for this room, check-in date and length. Null until it has been seen twice. */
+  low: { price: number; seenAt: string } | null;
 }
 
-export interface LeadPoint {
-  /** Days between the poll and check-in. 0 = same day. */
-  daysBefore: number;
-  samples: number;
-  /** Average of price / cheapest price seen for the same stay. 1.0 = as cheap as it gets. */
-  avgRatio: number;
+export interface DealsResult {
+  /** ISO time of the poll these prices come from, or null if no poll has run yet. */
+  fetchedAt: string | null;
+  deals: Deal[];
+}
+
+export interface RefreshStatus {
+  /** ISO time of the latest finished poll, or null. */
+  fetchedAt: string | null;
+  /** A poll is running now. */
+  polling: boolean;
+  /** Error from the last background poll, if it failed. */
+  error: string | null;
 }
 
 export interface CatalogRoom {
   roomId: number;
   name: string;
+  /** Absolute page URL on the TOP 10 site. */
+  url: string;
   /** Absolute image URL on the TOP 10 site, or null. */
   image: string | null;
 }

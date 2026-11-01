@@ -1,23 +1,15 @@
-import { poll, deals, leadProfile, history, loadConfig, syncCatalog, type Change, type Deal } from '@top10/core';
+import { poll, deals, syncCatalog, type Deal } from '@top10/core';
 
-const fmtChange = (c: Change) =>
-  c.kind === 'available'
-    ? `★ ${c.label} ${c.stayDate} (${c.nights}n): became available at $${c.to}`
-    : `↓ ${c.label} ${c.stayDate} (${c.nights}n): $${c.from} → $${c.to}`;
-
-const fmtDeal = (d: Deal) => {
-  const was = d.previousPrice !== null && d.previousPrice !== d.price ? `  (was $${d.previousPrice})` : '';
-  const lowest = d.isLowest ? '  ★ lowest seen' : '';
-  return `${d.stayDate}  ${d.nights}n  $${d.price}  ${d.label}${was}${lowest}`;
-};
+const fmtDeal = (d: Deal) =>
+  `${d.stayDate}  ${d.nights}n  $${d.price.toFixed(2)}/night  ($${d.total} total)  ${d.label}` +
+  (d.low && d.low.price < d.price ? `  [low $${d.low.price.toFixed(2)} on ${d.low.seenAt.slice(0, 10)}]` : '');
 
 const USAGE = [
   'usage:',
   '  sync                       fetch park/room names and images for config.json',
-  '  poll                       price every tracked stay and record it',
-  '  deals [fromDay] [toDay]    bookable now (default 0 7 = tonight to next week)',
-  '  lead                       average price by days before check-in',
-  '  history <roomId> <YYYY-MM-DD>',
+  '  poll                       price every tracked room and save the result',
+  '  deals [fromDay] [toDay]    bookable as of the last poll, cheapest per night first',
+  '                             (days from today; default: everything in the last poll)',
 ].join('\n');
 
 const [cmd, ...args] = process.argv.slice(2);
@@ -29,37 +21,19 @@ switch (cmd) {
     break;
   }
   case 'poll': {
-    const r = await poll(loadConfig());
-    console.log(`checked ${r.stays} stays with ${r.requests} requests`);
-    console.log(r.changes.map(fmtChange).join('\n') || 'no changes since last poll');
+    const r = await poll();
+    console.log(`found ${r.stays} bookable stays with ${r.requests} requests`);
     break;
   }
   case 'deals': {
-    const [fromDay = 0, toDay = loadConfig().horizonDays] = args.map(Number);
-    const list = deals({ fromDay, toDay });
-    console.log(list.length ? list.map(fmtDeal).join('\n') : 'nothing bookable in that window');
-    break;
-  }
-  case 'lead': {
-    const points = leadProfile();
-    if (!points.length) console.log('not enough history yet; run poll a few times');
-    for (const p of points) {
-      const above = ((p.avgRatio - 1) * 100).toFixed(1);
-      console.log(`${String(p.daysBefore).padStart(3)} days before  +${above}% vs cheapest  (${p.samples} samples)`);
-    }
-    break;
-  }
-  case 'history': {
-    const [roomId, stayDate] = args;
-    if (!roomId || !stayDate) {
-      console.log(USAGE);
+    const [fromDay, toDay] = args.map(Number);
+    const { fetchedAt, deals: list } = deals({ fromDay, toDay });
+    if (!fetchedAt) {
+      console.log('No prices yet. Run: pnpm run cli -- poll');
       break;
     }
-    const rows = history(Number(roomId), stayDate);
-    if (!rows.length) console.log('no observations');
-    for (const r of rows) {
-      console.log(`${r.fetched_at}  ${r.available ? `$${r.price}` : r.note}`);
-    }
+    console.log(`prices from ${new Date(fetchedAt).toLocaleString()}`);
+    console.log(list.length ? list.map(fmtDeal).join('\n') : 'nothing bookable in that window');
     break;
   }
   default:

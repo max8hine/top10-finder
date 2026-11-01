@@ -1,4 +1,5 @@
 .env
 node_modules/
 dist/
-data/prices.db*
+data/prices.json*
+data/history.db*

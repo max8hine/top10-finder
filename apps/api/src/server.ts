@@ -1,12 +1,12 @@
 import { createServer, type ServerResponse } from 'node:http';
-import { deals, history, leadProfile, loadCatalog, loadConfig } from '@top10/core';
+import { deals, loadCatalog, loadConfig, refresh, refreshStatus, removeRoom } from '@top10/core';
 
 // JSON API over the core library. The web app and any other client read from here.
-// Data is produced by `pnpm run cli -- poll` (run it on a schedule); this server only reads.
+// Prices come from the latest poll. POST /api/refresh starts one in the background when the last is stale.
 
 const PORT = Number(process.env.PORT ?? 3000);
 
-const int = (v: string | null, fallback: number) => (v !== null && Number.isInteger(Number(v)) ? Number(v) : fallback);
+const int = (v: string | null) => (v !== null && Number.isInteger(Number(v)) ? Number(v) : undefined);
 
 const send = (res: ServerResponse, status: number, body: unknown) =>
   res.writeHead(status, { 'content-type': 'application/json' }).end(JSON.stringify(body, null, 2));
@@ -14,25 +14,21 @@ const send = (res: ServerResponse, status: number, body: unknown) =>
 createServer((req, res) => {
   const url = new URL(req.url ?? '/', 'http://localhost');
   try {
+    const room = url.pathname.match(/^\/api\/rooms\/(\d+)$/);
+    if (room) {
+      if (req.method !== 'DELETE') return send(res, 405, { error: 'use DELETE' });
+      return send(res, 200, { horizonDays: loadConfig().horizonDays, ...removeRoom(Number(room[1])) });
+    }
     switch (url.pathname) {
-      case '/api/catalog': {
-        const { horizonDays } = loadConfig();
-        return send(res, 200, { horizonDays, ...loadCatalog() });
-      }
-      case '/api/deals': {
-        const { horizonDays } = loadConfig();
-        const fromDay = int(url.searchParams.get('from'), 0);
-        const toDay = int(url.searchParams.get('to'), horizonDays);
-        return send(res, 200, deals({ fromDay, toDay }));
-      }
-      case '/api/lead':
-        return send(res, 200, leadProfile());
-      case '/api/history': {
-        const roomId = int(url.searchParams.get('roomId'), NaN);
-        const date = url.searchParams.get('date') ?? '';
-        if (!Number.isFinite(roomId) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return send(res, 400, { error: 'need roomId and date=YYYY-MM-DD' });
-        return send(res, 200, history(roomId, date));
-      }
+      case '/api/catalog':
+        return send(res, 200, { horizonDays: loadConfig().horizonDays, ...loadCatalog() });
+      case '/api/deals':
+        return send(res, 200, deals({ fromDay: int(url.searchParams.get('from')), toDay: int(url.searchParams.get('to')) }));
+      case '/api/status':
+        return send(res, 200, refreshStatus());
+      case '/api/refresh':
+        if (req.method !== 'POST') return send(res, 405, { error: 'use POST' });
+        return send(res, 200, refresh({ force: url.searchParams.get('force') === '1' }));
       default:
         return send(res, 404, { error: 'not found' });
     }
