@@ -18,6 +18,8 @@ export interface Config {
   pollEveryHours: number;
   /** Price history older than this many days is deleted. */
   historyDays: number;
+  /** Weekend stays recorded beyond the horizon: `nights` from each Friday check-in (see weekends.ts). */
+  weekends: { nights: number; startWeeks: number; count: number };
   rooms: Room[];
 }
 

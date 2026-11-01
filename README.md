@@ -67,7 +67,7 @@ pnpm run web
 |---|---|
 | `pnpm run cli -- sync` | Fetches park and room names, images, and links for the rooms in `config.json`. Run after changing the config. |
 | `pnpm run cli -- poll` | Prices every tracked room over the horizon and saves the result, replacing the previous one. |
-| `pnpm run cli -- deals [fromDay] [toDay]` | Stays bookable as of the last poll, cheapest per night first. Days are counted from today; default is today through the horizon. |
+| `pnpm run cli -- deals [fromDay] [toDay]` | Stays bookable as of the last poll, cheapest per night first. Days are counted from today; default is everything in the last poll, including the weekend stays. |
 | `pnpm run api` | JSON API at http://127.0.0.1:3000. Routes: `/api/catalog`, `/api/deals?from=&to=`, `/api/status`, `POST /api/refresh[?force=1]`. |
 | `pnpm run web` | Web app at http://localhost:5173. Needs the API running. |
 | `pnpm start` | API and web app together. |
@@ -86,6 +86,7 @@ Prices in `deals`, the API, and the web app are per night (the whole-stay total 
 - `requestsPerSecond`: throttle for the site API
 - `pollEveryHours`: the page starts a poll on load when the last one is older than this (default 72)
 - `historyDays`: price history older than this is deleted (default 365)
+- `weekends`: `{ nights, startWeeks, count }`. Every poll also records weekend stays beyond the horizon: a `nights`-night stay from each Friday check-in. The upcoming Friday is week 0; `startWeeks: 1` starts one week after it, and `count: 5` covers five Fridays. Weekend stays are recorded to history only and aren't shown on the page.
 - `rooms`: `{ hotelId, roomId, park, name }` for each room to track. Add rooms from other parks here, then run `sync`. The web app shows one card per park in this list.
 
 ## Scheduling

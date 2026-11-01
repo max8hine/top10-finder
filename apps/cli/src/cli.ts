@@ -9,7 +9,7 @@ const USAGE = [
   '  sync                       fetch park/room names and images for config.json',
   '  poll                       price every tracked room and save the result',
   '  deals [fromDay] [toDay]    bookable as of the last poll, cheapest per night first',
-  '                             (days from today; default: today through the horizon)',
+  '                             (days from today; default: everything in the last poll)',
 ].join('\n');
 
 const [cmd, ...args] = process.argv.slice(2);

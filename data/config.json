@@ -5,6 +5,7 @@
   "requestsPerSecond": 3,
   "pollEveryHours": 72,
   "historyDays": 365,
+  "weekends": { "nights": 2, "startWeeks": 1, "count": 5 },
   "rooms": [
     { "hotelId": 3008, "roomId": 476, "park": "Akaroa", "name": "Self Contained Studio Units" },
     { "hotelId": 3008, "roomId": 477, "park": "Akaroa", "name": "Self Contained Family Units" },
@@ -18,7 +19,6 @@
     { "hotelId": 3071, "roomId": 953, "park": "Ross Beach", "name": "Geodesic Glamping Domes" },
     { "hotelId": 3071, "roomId": 944, "park": "Ross Beach", "name": "Maxi Apartment Pod" },
     { "hotelId": 3071, "roomId": 947, "park": "Ross Beach", "name": "Ensuite Pod" },
-    { "hotelId": 3071, "roomId": 951, "park": "Ross Beach", "name": "Standard Pod" },
 
     { "hotelId": 3034, "roomId": 321, "park": "Pohara Beach", "name": "Beachfront Self-Contained Unit" },
     { "hotelId": 3034, "roomId": 315, "park": "Pohara Beach", "name": "Beachfront Motel Unit" },

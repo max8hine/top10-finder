@@ -22,7 +22,7 @@ function open(): DatabaseSync {
       room_id INTEGER NOT NULL,
       stay_date TEXT NOT NULL,
       nights INTEGER NOT NULL,
-      total REAL NOT NULL
+      total REAL
     );
     CREATE INDEX IF NOT EXISTS stays_key ON stays (room_id, stay_date, nights);
   `);
@@ -59,7 +59,7 @@ export interface Low {
 /** Key for a stay: room, check-in date and length. Different lengths are never compared. */
 export const stayKey = (roomId: number, stayDate: string, nights: number) => `${roomId}|${stayDate}|${nights}`;
 
-/** Lowest price ever recorded for each stay checking in on or after `fromDate`. */
+/** Lowest price ever recorded for each bookable stay checking in on or after `fromDate`. */
 export function lowestSeen(fromDate: string): Map<string, Low> {
   const rows = open()
     .prepare(
@@ -68,7 +68,7 @@ export function lowestSeen(fromDate: string): Map<string, Low> {
                 ROW_NUMBER() OVER (PARTITION BY s.room_id, s.stay_date, s.nights ORDER BY s.total, p.fetched_at) AS rn,
                 COUNT(*) OVER (PARTITION BY s.room_id, s.stay_date, s.nights) AS polls
          FROM stays s JOIN polls p ON p.id = s.poll_id
-         WHERE s.stay_date >= ?
+         WHERE s.stay_date >= ? AND s.total IS NOT NULL
        ) WHERE rn = 1`,
     )
     .all(fromDate) as { room_id: number; stay_date: string; nights: number; total: number; fetched_at: string; polls: number }[];

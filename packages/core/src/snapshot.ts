@@ -4,14 +4,17 @@ import { DATA_DIR } from './paths.js';
 
 const FILE = join(DATA_DIR, 'prices.json');
 
-/** One bookable stay: the first length in config.nights that could be booked for this check-in. */
+/**
+ * One check-in date and length. `total` is null when the site would not book it, so the history
+ * records dates that were unavailable as well as the ones that were bookable.
+ */
 export interface Stay {
   hotelId: number;
   roomId: number;
   stayDate: string;
   nights: number;
-  /** Member price for the whole stay. */
-  total: number;
+  /** Member price for the whole stay, or null if not bookable. */
+  total: number | null;
 }
 
 /** Result of the latest poll. Each poll replaces the previous snapshot. */

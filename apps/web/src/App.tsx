@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import type { Catalog, CatalogPark, Deal, DealsResult, RefreshStatus } from '@top10/core/types';
 
 // Data is fetched once on page load from the JSON API (apps/api), which wraps @top10/core.
@@ -9,26 +9,9 @@ interface PageData {
   prices: DealsResult;
 }
 
-const WINDOWS = [
-  { label: 'Tonight', maxDays: 0 },
-  { label: 'Next 3 days', maxDays: 3 },
-  { label: 'Next week', maxDays: 7 },
-  { label: 'Whole horizon', maxDays: Infinity },
-];
-
 const money = (n: number) => n.toLocaleString('en-NZ', { style: 'currency', currency: 'NZD' });
 const day = (stayDate: string) =>
   new Date(stayDate + 'T00:00:00').toLocaleDateString('en-NZ', { weekday: 'short', day: 'numeric', month: 'short' });
-
-const todayKey = () => {
-  const d = new Date();
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-};
-
-/** Days from today to the check-in date (0 = tonight). */
-const daysAway = (stayDate: string, today: string) =>
-  Math.round((Date.parse(stayDate + 'T00:00:00') - Date.parse(today + 'T00:00:00')) / 86_400_000);
 
 const cheapestOf = (deals: Deal[]) =>
   deals.reduce<Deal | null>((best, d) => (!best || d.price < best.price ? d : best), null);
@@ -44,7 +27,6 @@ export function App() {
   const [data, setData] = useState<PageData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hotelId, setHotelId] = useState<number | null>(null);
-  const [maxDays, setMaxDays] = useState(WINDOWS[2].maxDays);
   const [status, setStatus] = useState<RefreshStatus | null>(null);
 
   // On load: read what we have, and ask the API to poll if the last poll is stale.
@@ -109,7 +91,7 @@ export function App() {
   }
   if (!data) return <main className="page"><p>Loading prices…</p></main>;
 
-  return <Dashboard data={data} status={status} onRefresh={refreshNow} onRemove={removeRoom} hotelId={hotelId} onPark={setHotelId} maxDays={maxDays} onWindow={setMaxDays} />;
+  return <Dashboard data={data} status={status} onRefresh={refreshNow} onRemove={removeRoom} hotelId={hotelId} onPark={setHotelId} />;
 }
 
 interface DashboardProps {
@@ -119,28 +101,18 @@ interface DashboardProps {
   onRemove: (roomId: number, name: string) => void;
   hotelId: number | null;
   onPark: (id: number | null) => void;
-  maxDays: number;
-  onWindow: (n: number) => void;
 }
 
-function Dashboard({ data, status, onRefresh, onRemove, hotelId, onPark, maxDays, onWindow }: DashboardProps) {
-  const today = useMemo(todayKey, []);
+function Dashboard({ data, status, onRefresh, onRemove, hotelId, onPark }: DashboardProps) {
   const { catalog, prices } = data;
-
-  // The window filter runs in the browser, so changing it needs no new request.
-  const visible = prices.deals.filter((d) => daysAway(d.stayDate, today) <= maxDays);
+  // The API returns stays from today onward, so every stay shown here is current.
+  const visible = prices.deals;
   const park = catalog.parks.find((p) => p.hotelId === hotelId) ?? null;
 
   return (
     <main className="page">
       <header className="top">
         <h1>TOP 10 member prices</h1>
-        <label>
-          Check-in
-          <select value={maxDays} onChange={(e) => onWindow(Number(e.target.value))}>
-            {WINDOWS.map((w) => <option key={w.label} value={w.maxDays}>{w.label}</option>)}
-          </select>
-        </label>
       </header>
 
       <section className="parks">
@@ -197,7 +169,7 @@ function Dashboard({ data, status, onRefresh, onRemove, hotelId, onPark, maxDays
       )}
 
       <footer className="muted">
-        {prices.fetchedAt ? `Prices from ${new Date(prices.fetchedAt).toLocaleString('en-NZ')}` : 'No prices yet'} · horizon {catalog.horizonDays} days ·{' '}
+        {prices.fetchedAt ? `Prices from ${new Date(prices.fetchedAt).toLocaleString('en-NZ')}` : 'No prices yet'} ·{' '}
         {status?.polling ? 'Refreshing prices, this takes a few minutes…' : <button onClick={onRefresh}>Refresh prices</button>}
         {status?.error && <span className="error"> Refresh failed: {status.error}</span>}
       </footer>
